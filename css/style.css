@@ -29,6 +29,7 @@
   --color-charcoal-border: #28302b;
 
   --color-offwhite: #fcfaf7;
+  --color-surface: #ffffff;
   --color-text-main: #1f2723;
   --color-text-muted: #57655f;
   --color-text-subtle: #7f8e87;
@@ -399,3 +400,96 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-forest-deep);
 }
+
+/* ==========================================================================
+   DARK MODE THEME
+   Activated by adding data-theme="dark" on the <html> element
+   ========================================================================== */
+html[data-theme="dark"] {
+  --color-sand: #141d18;
+  --color-sand-light: #0d1410;
+  --color-sand-border: #29362e;
+  --color-sand-dark: #29362e;
+  --color-forest-mist: #15201a;
+  --color-offwhite: #101713;
+  --color-surface: #16201a;
+
+  --color-text-main: #e6ebe8;
+  --color-text-muted: #a6b2ab;
+  --color-text-subtle: #85938b;
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.35);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 18px 45px rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] body {
+  background-color: var(--color-sand-light);
+  color: var(--color-text-main);
+}
+
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6 {
+  color: #eaf1ec;
+}
+
+html[data-theme="dark"] .author-name,
+html[data-theme="dark"] .search-modal-input {
+  color: #e6ebe8;
+}
+
+/* Sub-page light navbar transforms into the dark glass navbar */
+html[data-theme="dark"] .site-nav.nav-light {
+  background: rgba(13, 20, 16, 0.94);
+  border-bottom-color: var(--color-sand-border);
+}
+
+html[data-theme="dark"] .site-nav.nav-light .brand-name { color: #ffffff; }
+html[data-theme="dark"] .site-nav.nav-light .nav-link { color: rgba(255, 255, 255, 0.85); }
+html[data-theme="dark"] .site-nav.nav-light .nav-link:hover,
+html[data-theme="dark"] .site-nav.nav-light .nav-link.active { color: var(--color-gold); }
+
+html[data-theme="dark"] .site-nav.nav-light .nav-action-btn {
+  background: #1a2620;
+  color: #e6ebe8;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+html[data-theme="dark"] .site-nav.nav-light .mobile-toggle { color: #ffffff; }
+
+/* Buttons adapt for contrast on dark surfaces */
+html[data-theme="dark"] .btn-outline {
+  border-color: #4b6b58;
+  color: #cfe0d5;
+}
+
+html[data-theme="dark"] .btn-outline:hover {
+  background: var(--color-forest);
+  color: #ffffff;
+}
+
+html[data-theme="dark"] [style*="border-color: var(--color-forest)"] {
+  border-color: #4b6b58 !important;
+}
+
+html[data-theme="dark"] [style*="color: var(--color-forest);"] {
+  color: #7bc49a !important;
+}
+
+html[data-theme="dark"] [style*="color: var(--color-forest-deep);"] {
+  color: #eaf1ec !important;
+}
+
+/* Inputs placed on light surfaces */
+html[data-theme="dark"] .filter-search-box input:focus {
+  background: var(--color-surface);
+  border-color: var(--color-gold);
+}
+
+html[data-theme="dark"] .fav-item { background: #101913; }

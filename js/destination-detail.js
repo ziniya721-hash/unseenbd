@@ -53,6 +53,9 @@ function loadDestinationDetail() {
   // Render Map & Location info
   renderMapSection(dest);
 
+  // Render Live Weather & Date
+  renderWeatherWidget(dest);
+
   // Render Related Destinations
   renderRelatedDestinations(dest);
 }
@@ -143,7 +146,7 @@ function renderQuickFacts(dest) {
   ];
 
   container.innerHTML = facts.map(fact => `
-    <div style="background: var(--color-white); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-sand-border); display: flex; flex-direction: column;">
+    <div style="background: var(--color-surface); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--color-sand-border); display: flex; flex-direction: column;">
       <span style="font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-subtle); letter-spacing: 0.08em; font-weight: 600; margin-bottom: 0.35rem;">${fact.label}</span>
       <span style="font-size: 1.05rem; font-weight: 600; color: var(--color-forest-deep);">${fact.value}</span>
     </div>
@@ -167,7 +170,7 @@ function renderItinerary(dest) {
         </div>
         ${idx < dest.itinerary.length - 1 ? '<div style="width: 2px; flex-grow: 1; background: var(--color-sand-border); margin-top: 0.5rem;"></div>' : ''}
       </div>
-      <div style="flex-grow: 1; background: var(--color-white); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-sand-border); box-shadow: var(--shadow-subtle);">
+      <div style="flex-grow: 1; background: var(--color-surface); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--color-sand-border); box-shadow: var(--shadow-subtle);">
         <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: var(--color-gold); margin-bottom: 0.25rem;">${item.day}</div>
         <h4 style="font-size: 1.25rem; margin-bottom: 0.65rem; color: var(--color-forest-deep);">${item.title}</h4>
         <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.65;">${item.description}</p>
@@ -234,6 +237,102 @@ function renderMapSection(dest) {
   const mapLink = document.getElementById('destMapDirectLink');
   if (coordEl) coordEl.textContent = dest.coordinates;
   if (mapLink) mapLink.href = `https://maps.google.com/?q=${dest.mapQuery}`;
+}
+
+/* -------------------------------------------------------------------------
+   Live Weather & Date Widget (Open-Meteo, no API key required)
+   ------------------------------------------------------------------------- */
+const HB_WEATHER_CODES = {
+  0: ['Clear sky', '☀️'], 1: ['Mainly clear', '🌤️'], 2: ['Partly cloudy', '⛅'], 3: ['Overcast', '☁️'],
+  45: ['Fog', '🌫️'], 48: ['Rime fog', '🌫️'],
+  51: ['Light drizzle', '🌦️'], 53: ['Drizzle', '🌦️'], 55: ['Dense drizzle', '🌦️'],
+  56: ['Freezing drizzle', '🌧️'], 57: ['Freezing drizzle', '🌧️'],
+  61: ['Light rain', '🌧️'], 63: ['Rain', '🌧️'], 65: ['Heavy rain', '🌧️'],
+  66: ['Freezing rain', '🌧️'], 67: ['Freezing rain', '🌧️'],
+  71: ['Light snow', '🌨️'], 73: ['Snow', '🌨️'], 75: ['Heavy snow', '🌨️'], 77: ['Snow grains', '🌨️'],
+  80: ['Rain showers', '🌦️'], 81: ['Rain showers', '🌦️'], 82: ['Violent showers', '⛈️'],
+  85: ['Snow showers', '🌨️'], 86: ['Snow showers', '🌨️'],
+  95: ['Thunderstorm', '⛈️'], 96: ['Thunderstorm', '⛈️'], 99: ['Thunderstorm', '⛈️']
+};
+
+function hbWeatherInfo(code) {
+  return HB_WEATHER_CODES[code] || ['—', '🌡️'];
+}
+
+function hbParseCoordinates(str) {
+  if (!str) return null;
+  const match = String(str).match(/([\d.]+)\s*°?\s*([NS])[^0-9]+([\d.]+)\s*°?\s*([EW])/i);
+  if (!match) return null;
+  let lat = parseFloat(match[1]);
+  let lon = parseFloat(match[3]);
+  if (match[2].toUpperCase() === 'S') lat = -lat;
+  if (match[4].toUpperCase() === 'W') lon = -lon;
+  return { lat, lon };
+}
+
+async function renderWeatherWidget(dest) {
+  const card = document.getElementById('destWeatherCard');
+  if (!card) return;
+
+  const now = new Date();
+  const dateEl = document.getElementById('weatherDate');
+  const placeEl = document.getElementById('weatherPlace');
+  const nowEl = document.getElementById('weatherNow');
+  const daysEl = document.getElementById('weatherDays');
+  const subEl = card.querySelector('.weather-sub');
+
+  if (dateEl) {
+    dateEl.textContent = now.toLocaleDateString('en-GB', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    });
+  }
+  if (placeEl) placeEl.textContent = `${dest.district}, Bangladesh`;
+
+  const coord = hbParseCoordinates(dest.coordinates);
+  if (!coord) {
+    if (nowEl) nowEl.innerHTML = '<span class="weather-error">Unavailable</span>';
+    return;
+  }
+
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${coord.lat}&longitude=${coord.lon}`
+      + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m`
+      + `&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=4`;
+
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('weather request failed');
+    const data = await res.json();
+    const cur = data.current || {};
+    const [label, emoji] = hbWeatherInfo(cur.weather_code);
+
+    if (nowEl) {
+      nowEl.innerHTML = `<span class="emoji">${emoji}</span><span class="temp">${Math.round(cur.temperature_2m)}°C</span>`;
+    }
+    if (subEl) {
+      subEl.innerHTML = `${label} · Feels like ${Math.round(cur.apparent_temperature)}°C · `
+        + `Humidity ${Math.round(cur.relative_humidity_2m)}% · Wind ${Math.round(cur.wind_speed_10m)} km/h`;
+    }
+
+    if (daysEl && data.daily && data.daily.time) {
+      const count = Math.min(3, data.daily.time.length);
+      let html = '';
+      for (let i = 0; i < count; i++) {
+        const dayName = new Date(data.daily.time[i])
+          .toLocaleDateString('en-GB', { weekday: 'short' });
+        const [dLabel, dEmoji] = hbWeatherInfo(data.daily.weather_code[i]);
+        html += `
+          <div class="weather-day">
+            <div class="dname">${dayName}</div>
+            <div class="demoji" title="${dLabel}">${dEmoji}</div>
+            <div class="dtemp">${Math.round(data.daily.temperature_2m_max[i])}° / ${Math.round(data.daily.temperature_2m_min[i])}°</div>
+          </div>`;
+      }
+      daysEl.innerHTML = html;
+    }
+  } catch (e) {
+    if (nowEl) nowEl.innerHTML = '<span class="weather-error">Live weather unavailable</span>';
+    if (subEl) subEl.textContent = 'Could not reach the weather service. Please try again later.';
+  }
 }
 
 function renderRelatedDestinations(currentDest) {

@@ -20,6 +20,8 @@ function initDestinationsDirectory() {
   let activeSeason = 'all';
   let searchQuery = '';
   let activeSort = 'recommended';
+  let activeView = 'grid';
+  let lastItems = [];
 
   function filterAndRender() {
     let items = [...window.HB_DATA.destinations];
@@ -59,7 +61,37 @@ function initDestinationsDirectory() {
 
     // Render Cards
     renderDestinationCards(items, container);
+
+    // Keep the map in sync when it is the active view
+    lastItems = items;
+    if (activeView === 'map') {
+      updateMapMarkers(items);
+    }
   }
+
+  // Grid / Map view switching
+  const viewToggleBtns = document.querySelectorAll('#destViewToggle .view-toggle-btn');
+  const gridEl = document.getElementById('destinationsGrid');
+  const mapEl = document.getElementById('destinationsMap');
+
+  viewToggleBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeView = btn.getAttribute('data-view');
+      viewToggleBtns.forEach(b => b.classList.toggle('active', b === btn));
+
+      if (activeView === 'map') {
+        if (gridEl) gridEl.style.display = 'none';
+        if (mapEl) mapEl.style.display = 'block';
+        initDestinationMap();
+        updateMapMarkers(lastItems);
+        // Leaflet needs a size recalculation once the container is visible
+        setTimeout(() => { if (window.hbMap) window.hbMap.invalidateSize(); }, 80);
+      } else {
+        if (gridEl) gridEl.style.display = '';
+        if (mapEl) mapEl.style.display = 'none';
+      }
+    });
+  });
 
   // Event Listeners for Filters
   if (searchInput) {
@@ -207,3 +239,92 @@ window.resetFilters = function() {
   if (seasonSelect) seasonSelect.value = 'all';
   initDestinationsDirectory();
 };
+
+/* -------------------------------------------------------------------------
+   Interactive Leaflet Map Engine
+   ------------------------------------------------------------------------- */
+function parseDestinationCoordinates(str) {
+  if (!str) return null;
+  const match = String(str).match(/([\d.]+)\s*°?\s*([NS])[^0-9]+([\d.]+)\s*°?\s*([EW])/i);
+  if (!match) return null;
+  let lat = parseFloat(match[1]);
+  let lng = parseFloat(match[3]);
+  if (match[2].toUpperCase() === 'S') lat = -lat;
+  if (match[4].toUpperCase() === 'W') lng = -lng;
+  return [lat, lng];
+}
+
+function initDestinationMap() {
+  const mapEl = document.getElementById('destinationsMap');
+  if (!mapEl || !window.L || window.hbMap) return;
+
+  window.hbMap = L.map(mapEl, { scrollWheelZoom: true, zoomControl: true })
+    .setView([23.685, 90.3563], 7);
+
+  window.hbMapMarkers = L.layerGroup().addTo(window.hbMap);
+
+  // Allow the theme controller to swap tile styles
+  window.__hbMapSetTiles = function (theme) {
+    applyMapTiles(theme === 'dark' ? 'dark' : 'light');
+  };
+  applyMapTiles(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+}
+
+function applyMapTiles(theme) {
+  const map = window.hbMap;
+  if (!map) return;
+  if (map.__hbTiles) map.removeLayer(map.__hbTiles);
+
+  const url = theme === 'dark'
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+  map.__hbTiles = L.tileLayer(url, {
+    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+  map.__hbTiles.bringToBack();
+}
+
+const HB_MAP_PIN_ICON = window.L ? L.divIcon({
+  className: 'hb-map-pin',
+  html: '<span></span>',
+  iconSize: [22, 22],
+  iconAnchor: [11, 20],
+  popupAnchor: [0, -18]
+}) : null;
+
+function updateMapMarkers(items) {
+  if (!window.hbMap) return;
+  const group = window.hbMapMarkers;
+  if (!group) return;
+  group.clearLayers();
+
+  if (!items || items.length === 0) return;
+
+  const bounds = [];
+  items.forEach(dest => {
+    const coords = parseDestinationCoordinates(dest.coordinates);
+    if (!coords) return;
+    bounds.push(coords);
+
+    const marker = L.marker(coords, HB_MAP_PIN_ICON ? { icon: HB_MAP_PIN_ICON } : {})
+      .addTo(group);
+
+    marker.bindPopup(`
+      <div class="hb-map-popup">
+        <img src="${dest.coverImage}" alt="${dest.name}">
+        <div class="hb-map-popup-body">
+          <h4>${dest.name}</h4>
+          <div class="meta">${dest.district}, ${dest.region}</div>
+          <a href="destination-detail.html?id=${dest.id}">Explore guide &rarr;</a>
+        </div>
+      </div>
+    `);
+  });
+
+  if (bounds.length) {
+    window.hbMap.fitBounds(bounds, { padding: [45, 45], maxZoom: 9 });
+  }
+}

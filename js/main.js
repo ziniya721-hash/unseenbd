@@ -24,6 +24,9 @@ window.addEventListener('error', function(e) {
   }
 }, true);
 
+// Apply persisted theme as early as possible to minimise flash
+applyTheme(getStoredTheme());
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavbarScroll();
   initMobileNav();
@@ -31,7 +34,74 @@ document.addEventListener('DOMContentLoaded', () => {
   initNewsletterForms();
   initAmbientSound();
   updateFavoritesCounter();
+  initThemeToggles();
 });
+
+/* -------------------------------------------------------------------------
+   0. Theme (Dark Mode) Controller
+   ------------------------------------------------------------------------- */
+const THEME_MOON_SVG = `<svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+const THEME_SUN_SVG = `<svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+
+function getStoredTheme() {
+  try {
+    const stored = localStorage.getItem('hb_theme');
+    if (stored === 'dark' || stored === 'light') return stored;
+  } catch (e) { /* storage blocked */ }
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  if (typeof window.__hbMapSetTiles === 'function') {
+    window.__hbMapSetTiles(theme);
+  }
+}
+
+window.toggleTheme = function () {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  try { localStorage.setItem('hb_theme', next); } catch (e) { /* ignore */ }
+  applyTheme(next);
+  if (typeof window.showToast === 'function') {
+    window.showToast(next === 'dark' ? 'Dark mode enabled 🌙' : 'Light mode enabled ☀️');
+  }
+};
+
+function initThemeToggles() {
+  // Desktop / sub-page navbar button
+  const actions = document.querySelector('.nav-actions');
+  if (actions && !actions.querySelector('.theme-toggle-btn')) {
+    const btn = document.createElement('button');
+    btn.className = 'nav-action-btn theme-toggle-btn';
+    btn.setAttribute('data-action', 'toggle-theme');
+    btn.setAttribute('aria-label', 'Toggle dark mode');
+    btn.setAttribute('title', 'Toggle dark mode');
+    btn.innerHTML = THEME_MOON_SVG + THEME_SUN_SVG;
+    btn.addEventListener('click', window.toggleTheme);
+
+    const mobileToggle = actions.querySelector('.mobile-toggle');
+    if (mobileToggle) actions.insertBefore(btn, mobileToggle);
+    else actions.appendChild(btn);
+  }
+
+  // Mobile drawer button
+  const drawer = document.querySelector('.mobile-drawer');
+  const mobileMenu = drawer ? drawer.querySelector('.mobile-menu') : null;
+  if (mobileMenu && !mobileMenu.querySelector('.mobile-theme-toggle')) {
+    const mBtn = document.createElement('button');
+    mBtn.className = 'mobile-theme-toggle';
+    mBtn.setAttribute('aria-label', 'Toggle dark mode');
+    mBtn.innerHTML = THEME_MOON_SVG + THEME_SUN_SVG + '<span>Appearance</span>';
+    mBtn.addEventListener('click', window.toggleTheme);
+    mobileMenu.appendChild(mBtn);
+  }
+}
 
 /* -------------------------------------------------------------------------
    1. Navbar Scroll Effect

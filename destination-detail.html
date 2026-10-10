@@ -7,6 +7,7 @@
   <meta name="description" content="In-depth travel guide, suggested itinerary, key attractions, cultural advice, and photo essays for Bangladesh's most beautiful destinations.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/components.css">
+  <script>(function(){try{var t=localStorage.getItem('hb_theme');if(t!=='dark'&&t!=='light'){t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();</script>
 </head>
 <body>
 
@@ -152,7 +153,7 @@
         </div>
 
         <!-- Sidebar: Travel Tips & Responsible Tourism Advice -->
-        <aside style="background: var(--color-white); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-sand-border); box-shadow: var(--shadow-subtle);">
+        <aside style="background: var(--color-surface); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-sand-border); box-shadow: var(--shadow-subtle);">
           <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--color-forest);">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -165,6 +166,25 @@
           <ul id="destTipsList" style="list-style: none;">
             <!-- Tips rendered here -->
           </ul>
+
+          <!-- Live Weather & Date Widget -->
+          <div id="destWeatherCard" class="weather-card">
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--color-forest);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+              </svg>
+              <h3 style="font-size: 1.25rem; margin: 0; color: var(--color-forest-deep);">Live Weather &amp; Date</h3>
+            </div>
+            <div class="weather-head">
+              <div>
+                <div class="weather-date" id="weatherDate">—</div>
+                <div class="weather-place" id="weatherPlace"></div>
+              </div>
+              <div class="weather-now" id="weatherNow"><span class="weather-loading">Loading…</span></div>
+            </div>
+            <div class="weather-sub"></div>
+            <div class="weather-days" id="weatherDays"></div>
+          </div>
         </aside>
       </section>
 
@@ -197,7 +217,7 @@
       </section>
 
       <!-- Interactive Map & Access Details -->
-      <section style="margin-bottom: 5rem; background: var(--color-white); border-radius: var(--radius-xl); border: 1px solid var(--color-sand-border); overflow: hidden; box-shadow: var(--shadow-subtle);">
+      <section style="margin-bottom: 5rem; background: var(--color-surface); border-radius: var(--radius-xl); border: 1px solid var(--color-sand-border); overflow: hidden; box-shadow: var(--shadow-subtle);">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;" class="detail-split-layout">
           <div style="padding: 3rem;">
             <span class="subtitle-editorial">Geographic Coordinates</span>
