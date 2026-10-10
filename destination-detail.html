@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destination Guide — Hidden Bangladesh</title>
+  <meta name="description" content="In-depth travel guide, suggested itinerary, key attractions, cultural advice, and photo essays for Bangladesh's most beautiful destinations.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="site-nav">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" aria-label="Hidden Bangladesh Home">
+        <div class="brand-symbol">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="brand-text-wrap">
+          <span class="brand-name">HIDDEN BANGLADESH</span>
+          <span class="brand-sub">DISCOVER THE UNSEEN</span>
+        </div>
+      </a>
+
+      <div class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="destinations.html" class="nav-link active">Destinations</a>
+        <a href="photography.html" class="nav-link">Photography</a>
+        <a href="stories.html" class="nav-link">Stories & Guides</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="nav-action-btn" data-action="toggle-sound" title="Listen to atmospheric river soundscape">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        </button>
+
+        <button class="nav-action-btn" data-action="open-search" title="Search destinations (Ctrl+K)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
+        <button class="nav-action-btn" data-action="open-favorites" title="View your saved places">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="fav-counter-badge" style="display: none;">0</span>
+        </button>
+
+        <button class="mobile-toggle" aria-label="Open mobile menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer">
+    <button class="mobile-drawer-close" aria-label="Close menu">✕</button>
+    <div class="mobile-menu">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="destinations.html" class="nav-link active">Explore Destinations</a>
+      <a href="photography.html" class="nav-link">Photography Gallery</a>
+      <a href="stories.html" class="nav-link">Travel Stories & Blog</a>
+      <a href="about.html" class="nav-link">About Hidden Bangladesh</a>
+      <a href="contact.html" class="nav-link">Contact & Inquiries</a>
+    </div>
+  </div>
+
+  <!-- Full-Screen Hero Cover -->
+  <header class="hero-full" style="min-height: 85vh;">
+    <div class="hero-bg">
+      <img id="destHeroBg" src="" alt="Destination cover photography">
+    </div>
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content" style="padding-top: 8rem;">
+      <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap;">
+        <span class="badge badge-white" id="destHeroBadge"></span>
+        <span style="font-size: 0.85rem; color: var(--color-sand); display: flex; align-items: center; gap: 0.35rem;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <span id="destHeroLocation"></span>
+        </span>
+      </div>
+
+      <h1 class="headline-display" style="color: var(--color-white); margin-bottom: 0.75rem;">
+        <span id="destHeroTitle"></span>
+        <span class="text-bengali" id="destHeroBengali" style="font-size: 0.55em; margin-left: 0.5rem; color: var(--color-gold);"></span>
+      </h1>
+
+      <p class="hero-lead" id="destHeroSubtitle" style="max-width: 680px;"></p>
+
+      <!-- Action Toolbar (Save to wishlist, Share, Google Maps) -->
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem;" id="destActionToolbar">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <main class="section-spacing">
+    <div class="container">
+
+      <!-- Breadcrumbs -->
+      <nav style="font-size: 0.85rem; color: var(--color-text-subtle); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <a href="index.html" style="color: var(--color-forest);">Home</a>
+        <span>/</span>
+        <a href="destinations.html" style="color: var(--color-forest);">Destinations</a>
+        <span>/</span>
+        <span id="destBreadcrumbName" style="color: var(--color-forest-deep); font-weight: 600;"></span>
+      </nav>
+
+      <!-- Quick Facts Strip -->
+      <section style="margin-bottom: 4rem;">
+        <span class="subtitle-editorial">Essential Overview</span>
+        <h2 style="font-size: 1.85rem; margin-bottom: 1.5rem; color: var(--color-forest-deep);">Key Expedition Facts</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;" id="destQuickFacts">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+
+      <!-- Narrative & Overview -->
+      <section style="display: grid; grid-template-columns: 2fr 1fr; gap: 3.5rem; margin-bottom: 5rem; align-items: flex-start;" class="detail-split-layout">
+        <div>
+          <span class="subtitle-editorial">Geography & Culture</span>
+          <h2 style="font-size: 2.25rem; margin-bottom: 1.5rem; color: var(--color-forest-deep);">The Landscape & Story</h2>
+          <p id="destOverviewText" style="font-size: 1.12rem; line-height: 1.85; color: var(--color-text-main); font-weight: 300; margin-bottom: 2rem;"></p>
+
+          <span class="subtitle-editorial" style="margin-top: 2rem;">Highlights</span>
+          <h3 style="font-size: 1.65rem; margin-bottom: 1.25rem; color: var(--color-forest-deep);">Must-Experience Encounters</h3>
+          <div style="display: flex; flex-direction: column; gap: 0.85rem;" id="destHighlightsList">
+            <!-- Highlights rendered here -->
+          </div>
+        </div>
+
+        <!-- Sidebar: Travel Tips & Responsible Tourism Advice -->
+        <aside style="background: var(--color-white); padding: 2rem; border-radius: var(--radius-lg); border: 1px solid var(--color-sand-border); box-shadow: var(--shadow-subtle);">
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: var(--color-forest);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <h3 style="font-size: 1.25rem; margin: 0; color: var(--color-forest-deep);">Responsible Travel Tips</h3>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 1.25rem;">
+            Please uphold these principles to protect delicate local ecosystems and respect native traditions:
+          </p>
+          <ul id="destTipsList" style="list-style: none;">
+            <!-- Tips rendered here -->
+          </ul>
+        </aside>
+      </section>
+
+      <!-- Suggested Itinerary -->
+      <section style="margin-bottom: 5rem; background: var(--color-sand-light); padding: 3.5rem 2.5rem; border-radius: var(--radius-xl); border: 1px solid var(--color-sand-border);">
+        <div style="max-width: 680px; margin-bottom: 2.5rem;">
+          <span class="subtitle-editorial">Recommended Route</span>
+          <h2 style="font-size: 2.25rem; color: var(--color-forest-deep); margin-bottom: 0.75rem;">Suggested Day-by-Day Itinerary</h2>
+          <p style="color: var(--color-text-muted);">A thoughtfully paced journey designed for deep immersion, authentic encounters, and zero rush.</p>
+        </div>
+
+        <div id="destItineraryList" style="max-width: 860px;">
+          <!-- Itinerary rendered here -->
+        </div>
+      </section>
+
+      <!-- Destination Photo Gallery -->
+      <section style="margin-bottom: 5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <span class="subtitle-editorial">Visual Archive</span>
+            <h2 style="font-size: 2rem; color: var(--color-forest-deep);">Destination Gallery</h2>
+          </div>
+          <span style="font-size: 0.85rem; color: var(--color-text-subtle);">Click any image to view high-resolution details</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;" id="destGalleryGrid">
+          <!-- Gallery rendered here -->
+        </div>
+      </section>
+
+      <!-- Interactive Map & Access Details -->
+      <section style="margin-bottom: 5rem; background: var(--color-white); border-radius: var(--radius-xl); border: 1px solid var(--color-sand-border); overflow: hidden; box-shadow: var(--shadow-subtle);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;" class="detail-split-layout">
+          <div style="padding: 3rem;">
+            <span class="subtitle-editorial">Geographic Coordinates</span>
+            <h2 style="font-size: 1.85rem; color: var(--color-forest-deep); margin-bottom: 1rem;">Access & Location</h2>
+            <p style="color: var(--color-text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem;">
+              GPS Coordinates: <strong id="destCoordinates" style="color: var(--color-forest);"></strong>
+            </p>
+            <p style="color: var(--color-text-muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 2rem;">
+              Traveling responsibly requires planning around seasonal water levels, local army checkpoints (in parts of the Chittagong Hill Tracts), and early morning boat departures. We recommend connecting with verified local indigenous guides.
+            </p>
+            <a href="#" target="_blank" rel="noopener" id="destMapDirectLink" class="btn btn-outline" style="border-color: var(--color-forest);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span>Open in Google Maps</span>
+            </a>
+          </div>
+          <div style="background: var(--color-forest-deep); color: var(--color-white); padding: 3rem; display: flex; flex-direction: column; justify-content: center; position: relative;">
+            <div style="position: absolute; inset: 0; opacity: 0.15; background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 16px 16px;"></div>
+            <div style="position: relative; z-index: 2;">
+              <span class="badge badge-gold" style="margin-bottom: 1rem;">Travel Advisory</span>
+              <h3 style="color: var(--color-white); font-size: 1.5rem; margin-bottom: 1rem;">Plan Your Expedition</h3>
+              <p style="color: rgba(255,255,255,0.8); font-size: 0.92rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                Need help coordinating licensed eco-friendly houseboats, indigenous homestays, or local mountain permits? Reach out to our cultural coordinators.
+              </p>
+              <a href="contact.html" class="btn btn-gold">Inquire About Local Guides</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Related Destinations -->
+      <section>
+        <div style="margin-bottom: 2.5rem;">
+          <span class="subtitle-editorial">Continue Exploring</span>
+          <h2 style="font-size: 2rem; color: var(--color-forest-deep);">Related Hidden Havens</h2>
+        </div>
+        <div class="destination-grid" id="destRelatedGrid">
+          <!-- Related rendered here -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo" style="margin-bottom: 1rem;">
+            <div class="brand-symbol">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+            <div class="brand-text-wrap">
+              <span class="brand-name">HIDDEN BANGLADESH</span>
+              <span class="brand-sub">DISCOVER THE UNSEEN</span>
+            </div>
+          </a>
+          <p>
+            An independent travel and cultural documentation initiative dedicated to unveiling the unexplored landscapes, ancient sanctuaries, and living traditions of Bangladesh.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Destinations</h4>
+          <div class="footer-links">
+            <a href="destination-detail.html?id=sajek-valley">Sajek Valley</a>
+            <a href="destination-detail.html?id=tanguar-haor">Tanguar Haor</a>
+            <a href="destination-detail.html?id=sundarbans">The Sundarbans</a>
+            <a href="destination-detail.html?id=ratargul-swamp-forest">Ratargul Swamp</a>
+            <a href="destination-detail.html?id=bandarban-hill-tracts">Bandarban & Nilgiri</a>
+            <a href="destination-detail.html?id=sreemangal-tea-gardens">Sreemangal</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Exploration</h4>
+          <div class="footer-links">
+            <a href="destinations.html">Destinations Directory</a>
+            <a href="photography.html">Photography Gallery</a>
+            <a href="stories.html">Travel Stories</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="privacy.html">Ethical Travel Charter</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Follow the Journey</h4>
+          <p style="font-size: 0.88rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">
+            Follow our photographic dispatches:
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link" title="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="#" class="social-link" title="YouTube">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+              </svg>
+            </a>
+            <a href="#" class="social-link" title="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Hidden Bangladesh. All rights reserved.</div>
+        <div style="display: flex; gap: 1.5rem;">
+          <a href="privacy.html" style="color: inherit;">Privacy Policy</a>
+          <a href="privacy.html#terms" style="color: inherit;">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox-modal" id="lightboxModal" role="dialog" aria-modal="true">
+    <button class="lightbox-close-btn">✕</button>
+    <div class="lightbox-content-wrap">
+      <div class="lightbox-image-wrap">
+        <img src="" alt="Fullscreen preview">
+      </div>
+      <div class="lightbox-caption-wrap">
+        <div class="lightbox-info">
+          <h3></h3>
+          <p></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-modal" id="searchModal" role="dialog" aria-modal="true">
+    <div class="search-modal-box">
+      <div class="search-modal-header">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--color-forest);">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-modal-input" placeholder="Search destinations, stories, photos..." autocomplete="off">
+        <button class="search-close-btn" style="font-size: 1.25rem; color: var(--color-text-subtle);">✕</button>
+      </div>
+      <div class="search-results-list"></div>
+    </div>
+  </div>
+
+  <!-- Favorites Drawer -->
+  <div class="favorites-drawer-overlay" id="favoritesOverlay"></div>
+  <aside class="favorites-drawer" id="favoritesDrawer">
+    <div class="favorites-header">
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color: var(--color-earth);">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <h3 style="font-size: 1.25rem; margin: 0; color: var(--color-forest-deep);">Your Saved Places</h3>
+      </div>
+      <button class="favorites-close-btn" style="font-size: 1.25rem; color: var(--color-text-subtle);">✕</button>
+    </div>
+    <div class="favorites-list"></div>
+  </aside>
+
+  <!-- Responsive layout styling for detail split -->
+  <style>
+    @media (max-width: 860px) {
+      .detail-split-layout {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/destination-detail.js"></script>
+</body>
+</html>
